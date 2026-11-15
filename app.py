@@ -12,14 +12,13 @@ st.markdown(
 )
 
 
-# Load top-paying jobs leaderboard from SQLite
+# Load top-paying jobs leaderboard from SQLite (Filtered to ignore unrealistic outliers > $2M)
 @st.cache_data
 def load_leaderboard():
   conn = sqlite3.connect("jobs.db")
-  # Only pull jobs where salary is listed (> 0), sorted highest to lowest
   df = pd.read_sql(
-      "SELECT title, salary_min, source FROM jobs WHERE salary_min > 0 ORDER BY"
-      " salary_min DESC LIMIT 3",
+      "SELECT title, salary_min, source FROM jobs WHERE salary_min > 0 AND"
+      " salary_min < 2000000 ORDER BY salary_min DESC LIMIT 3",
       conn,
   )
   conn.close()

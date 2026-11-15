@@ -4,9 +4,10 @@ import sqlite3
 def init_db():
   conn = sqlite3.connect("jobs.db")
   cursor = conn.cursor()
-  # Added salary_min column
+  # Drop old table so schema updates cleanly every time
+  cursor.execute("DROP TABLE IF EXISTS jobs")
   cursor.execute("""
-        CREATE TABLE IF NOT EXISTS jobs (
+        CREATE TABLE jobs (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             title TEXT,
             source TEXT,
@@ -32,4 +33,4 @@ def save_jobs(jobs):
 
 if __name__ == "__main__":
   init_db()
-  print("Database initialized with salary tracking!")
+  print("Database initialized and refreshed with salary tracking!")
